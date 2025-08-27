@@ -1,6 +1,7 @@
 package com.example.authapi.models;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,19 +25,19 @@ import lombok.RequiredArgsConstructor;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-public class User {
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
 	private UUID id;
-	
+
 	@NonNull
 	private String name;
-	
+
 	@NonNull
 	private String email;
-	
+
 	private String password;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,4 +51,34 @@ public class User {
 
 	@Column(name = "is_active")
 	private boolean isActive;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of();
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return isActive;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return isActive;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return isActive;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return isActive;
+	}
 }
