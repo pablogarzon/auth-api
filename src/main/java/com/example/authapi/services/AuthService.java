@@ -6,7 +6,7 @@ import com.example.authapi.dtos.UserResponseDTO;
 
 public interface AuthService {
 	
-	UserResponseDTO signUp(CreateUserDTO createUserDTO);
+	UserResponseDTO signUp(CreateUserDTO createUserDTO) throws Exception;
 
 	UserResponseDTO login(LoginDTO loginDTO);
 	

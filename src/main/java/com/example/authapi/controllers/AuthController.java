@@ -20,7 +20,7 @@ public class AuthController {
     private AuthService authService;
     
 	@PostMapping("/sign-up")
-	public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserDTO createUserDTO) {
+	public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserDTO createUserDTO) throws Exception {
 		var createdUser = authService.signUp(createUserDTO);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}

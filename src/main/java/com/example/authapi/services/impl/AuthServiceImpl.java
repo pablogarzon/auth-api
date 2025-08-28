@@ -33,7 +33,10 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserResponseDTO signUp(CreateUserDTO createUserDTO) {
+	public UserResponseDTO signUp(CreateUserDTO createUserDTO) throws Exception {
+		if (userRepository.findByEmail(createUserDTO.getEmail()).isPresent()) {
+	        throw new Exception("Ya existe un usuario con ese email.");
+	    }
 		var user = UserMapper.toEntity(createUserDTO);
 		user.setActive(true);
 		user.setLastLogin(LocalDateTime.now());
