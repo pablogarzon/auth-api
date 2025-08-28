@@ -1,5 +1,7 @@
 package com.example.authapi.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ public class AuthController {
     private AuthService authService;
     
 	@PostMapping("/sign-up")
-	public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserDTO createUserDTO) throws Exception {
+	public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws Exception {
 		var createdUser = authService.signUp(createUserDTO);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}

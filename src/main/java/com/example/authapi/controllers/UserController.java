@@ -3,6 +3,8 @@ package com.example.authapi.controllers;
 import java.util.List;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +44,8 @@ public class UserController {
 
 	// UpdateUserDTO?
 	@PutMapping("/{id}")
-	public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO updateUserDTO) {
+	public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id,
+			@Valid @RequestBody UpdateUserDTO updateUserDTO) {
 		UserResponseDTO updatedUser = service.updateUser(id, updateUserDTO);
 		return ResponseEntity.ok(updatedUser);
 	}
