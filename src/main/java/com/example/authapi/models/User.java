@@ -1,6 +1,7 @@
 package com.example.authapi.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -8,14 +9,18 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.authapi.mappers.PhoneMapper;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +37,7 @@ public class User implements UserDetails {
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Column(name = "user_id")
 	private UUID id;
 
 	@NonNull
@@ -43,9 +49,17 @@ public class User implements UserDetails {
 
 	private String password;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Phone> phones;
-
+	@OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE }, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<Phone> phones = new ArrayList<>();
+	
+	public void setPhones(List<Phone> phones) {
+		for (Phone phone : phones) {
+			phone.setUser(this);
+			this.phones.add(phone);
+		}
+	}
+	
 	@Column(name = "created_at", updatable = false)
 	private LocalDateTime created;
 

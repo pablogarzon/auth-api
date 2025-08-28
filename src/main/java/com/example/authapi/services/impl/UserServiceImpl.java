@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.authapi.dtos.UpdateUserDTO;
 import com.example.authapi.dtos.UserResponseDTO;
+import com.example.authapi.mappers.PhoneMapper;
 import com.example.authapi.mappers.UserMapper;
 import com.example.authapi.repositories.UserRepository;
 import com.example.authapi.services.UserService;
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
 		user.setActive(updateUserDTO.isActive());
 		user.setEmail(updateUserDTO.getEmail());
 		user.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));
-		user.setPhones(updateUserDTO.getPhones());
+		user.setPhones(PhoneMapper.toEntity(updateUserDTO.getPhones()));
 		return UserMapper.toDto(userRepository.save(user));
 	}
 
