@@ -5,12 +5,15 @@ import java.time.LocalDateTime;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.authapi.dtos.CreateUserDTO;
 import com.example.authapi.dtos.LoginDTO;
 import com.example.authapi.dtos.UserResponseDTO;
+import com.example.authapi.exceptions.EmailAlreadyUsedException;
+import com.example.authapi.exceptions.InvalidCredentialsException;
 import com.example.authapi.mappers.UserMapper;
 import com.example.authapi.models.User;
 import com.example.authapi.repositories.UserRepository;
@@ -33,10 +36,10 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserResponseDTO signUp(CreateUserDTO createUserDTO) throws Exception {
+	public UserResponseDTO signUp(CreateUserDTO createUserDTO) throws EmailAlreadyUsedException {
 		if (userRepository.findByEmail(createUserDTO.getEmail()).isPresent()) {
-	        throw new Exception("Ya existe un usuario con ese email.");
-	    }
+			throw new EmailAlreadyUsedException();
+		}
 		var user = UserMapper.toEntity(createUserDTO);
 		user.setActive(true);
 		user.setLastLogin(LocalDateTime.now());
@@ -51,9 +54,15 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public UserResponseDTO login(LoginDTO loginDTO) {
-		var authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+	public UserResponseDTO login(LoginDTO loginDTO) throws InvalidCredentialsException {
+		Authentication authentication = null;
+		try {
+			authentication = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+		} catch (AuthenticationException e) {
+			throw new InvalidCredentialsException();
+		}
+
 		var updatedUser = updateLastLogin(authentication);
 
 		var response = UserMapper.toDto(updatedUser);
@@ -63,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private User updateLastLogin(final Authentication authentication) {
-		User user = (User) authentication;
+		User user = (User) authentication.getPrincipal();
 		user.setLastLogin(LocalDateTime.now());
 		return userRepository.save(user);
 	}

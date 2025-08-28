@@ -12,15 +12,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.example.authapi.mappers.PhoneMapper;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,12 +32,18 @@ import lombok.RequiredArgsConstructor;
 @Table(name = "users")
 public class User implements UserDetails {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+	@Type(type = "uuid-char") 
 	@Column(name = "user_id")
 	private UUID id;
-
+	
 	@NonNull
 	private String name;
 

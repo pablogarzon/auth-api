@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.authapi.dtos.UpdateUserDTO;
 import com.example.authapi.dtos.UserResponseDTO;
+import com.example.authapi.exceptions.UserNotFoundException;
 import com.example.authapi.mappers.PhoneMapper;
 import com.example.authapi.mappers.UserMapper;
 import com.example.authapi.repositories.UserRepository;
@@ -35,13 +36,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDTO getUserById(UUID id) {
-		var user = userRepository.findById(id).orElseThrow();
+		var user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 		return UserMapper.toDto(user);
 	}
 
 	@Override
 	public UserResponseDTO updateUser(UUID id, UpdateUserDTO updateUserDTO) {
-		var user = userRepository.findById(id).orElseThrow();
+		var user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
 		user.setActive(updateUserDTO.isActive());
 		user.setEmail(updateUserDTO.getEmail());
 		user.setPassword(passwordEncoder.encode(updateUserDTO.getPassword()));

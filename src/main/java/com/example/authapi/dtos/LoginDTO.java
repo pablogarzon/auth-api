@@ -1,9 +1,11 @@
 package com.example.authapi.dtos;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class LoginDTO {
-	private final String email;
-	private final String password;
+	private String email;
+	private String password;
 }
