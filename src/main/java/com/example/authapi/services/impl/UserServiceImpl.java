@@ -1,16 +1,13 @@
 package com.example.authapi.services.impl;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.authapi.dtos.CreateUserDTO;
 import com.example.authapi.dtos.UpdateUserDTO;
 import com.example.authapi.dtos.UserResponseDTO;
 import com.example.authapi.mappers.UserMapper;
@@ -27,16 +24,6 @@ public class UserServiceImpl implements UserService {
 	public UserServiceImpl(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
-	}
-
-	@Override
-	public UserResponseDTO createUser(CreateUserDTO createUserDTO) {
-		var user = UserMapper.toEntity(createUserDTO);
-		user.setActive(true);
-		user.setLastLogin(LocalDateTime.now());
-		user.setCreated(LocalDateTime.now());
-		user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
-		return UserMapper.toDto(userRepository.save(user));
 	}
 
 	@Override

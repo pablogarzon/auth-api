@@ -26,8 +26,8 @@ public class JWTService {
 
 	public String generateToken(final User user) {
 		var claims = new HashMap<String, Object>();
-		return Jwts.builder().claims().add(claims).subject(user.getEmail()).issuedAt(new Date())
-				.expiration(new Date(System.currentTimeMillis() + 60 * 60 * 10)).and().signWith(secretKey).compact();
+		return Jwts.builder().claims().add(claims).subject(user.getUsername()).issuedAt(new Date())
+				.expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 10)).and().signWith(secretKey).compact();
 	}
 
 	private SecretKey getKey(final String base64Secret) {
