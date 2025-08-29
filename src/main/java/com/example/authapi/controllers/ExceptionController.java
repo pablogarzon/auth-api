@@ -38,7 +38,7 @@ public class ExceptionController {
 	public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 	    StringBuilder strBuilder = new StringBuilder();
 
-	    e.getBindingResult().getAllErrors().forEach((error) -> {
+	    e.getBindingResult().getAllErrors().forEach(error -> {
 	        String fieldName;
 	        try {
 	            fieldName = ((FieldError) error).getField();

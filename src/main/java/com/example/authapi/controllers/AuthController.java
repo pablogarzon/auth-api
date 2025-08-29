@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.authapi.dtos.CreateUserDTO;
 import com.example.authapi.dtos.LoginDTO;
 import com.example.authapi.dtos.UserResponseDTO;
+import com.example.authapi.exceptions.EmailAlreadyUsedException;
 import com.example.authapi.services.AuthService;
 
 @RestController
@@ -21,7 +22,7 @@ public class AuthController {
     private AuthService authService;
     
 	@PostMapping("/sign-up")
-	public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws Exception {
+	public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody CreateUserDTO createUserDTO) throws EmailAlreadyUsedException {
 		var createdUser = authService.signUp(createUserDTO);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}
