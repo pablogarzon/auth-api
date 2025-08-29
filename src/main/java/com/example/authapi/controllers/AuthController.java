@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.authapi.dtos.CreateUserDTO;
@@ -32,17 +31,4 @@ public class AuthController {
     	UserResponseDTO authResponse = authService.login(loginDTO);
         return ResponseEntity.ok(authResponse);
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String token) {
-        authService.logout(token);
-        return ResponseEntity.noContent().build();
-    }
-
-    /*
-    @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenDTO refreshTokenDTO) {
-        AuthResponse authResponse = authService.refreshToken(refreshTokenDTO);
-        return ResponseEntity.ok(authResponse);
-    }*/
 }

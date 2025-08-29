@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.authapi.dtos.ErrorDTO;
-import com.example.authapi.services.impl.JWTService;
+import com.example.authapi.services.JWTService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.JwtException;

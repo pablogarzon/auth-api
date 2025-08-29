@@ -1,4 +1,4 @@
-package com.example.authapi.services.impl;
+package com.example.authapi.services;
 
 import java.util.Date;
 import java.util.HashMap;

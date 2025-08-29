@@ -11,6 +11,4 @@ public interface AuthService {
 	UserResponseDTO signUp(CreateUserDTO createUserDTO) throws EmailAlreadyUsedException;
 
 	UserResponseDTO login(LoginDTO loginDTO) throws InvalidCredentialsException;
-	
-	void logout(String token);
 }

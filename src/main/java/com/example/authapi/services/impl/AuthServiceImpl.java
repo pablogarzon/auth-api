@@ -18,6 +18,7 @@ import com.example.authapi.mappers.UserMapper;
 import com.example.authapi.models.User;
 import com.example.authapi.repositories.UserRepository;
 import com.example.authapi.services.AuthService;
+import com.example.authapi.services.JWTService;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -75,11 +76,5 @@ public class AuthServiceImpl implements AuthService {
 		User user = (User) authentication.getPrincipal();
 		user.setLastLogin(LocalDateTime.now());
 		return userRepository.save(user);
-	}
-
-	@Override
-	public void logout(String token) {
-		// TODO Auto-generated method stub
-
 	}
 }
