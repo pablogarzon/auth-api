@@ -32,6 +32,21 @@ jacocoTestReport {
         xml.required = false
         csv.required = false
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+        
+        afterEvaluate {
+	        classDirectories.setFrom(
+	            files(classDirectories.files.collect {
+	                fileTree(dir: it, exclude: [
+	                    // Excluir todos los DTOs y Models
+	                    '**/dtos/**',
+	                    '**/models/**',
+	                    '**/*DTO.class',
+	                    '**/Phone.class',
+	                    '**/User.class',
+	                ])
+	            })
+	        )
+    	}
     }
 }
 
