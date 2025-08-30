@@ -8,6 +8,17 @@ Microservicio para la creación y consulta de usuarios
 - Login con generación de JWT (`/login`)
 - CRUD de usuarios (solo accesible con token válido)
 
+### Funcionamiento del proceso de seguridad
+
+**Sign-up**
+![sign-up](./misc/sign-up.png)
+
+**Login**
+![login](./misc/login.png)
+
+**Autenticación de otras consultas**
+![getUsers](./misc/getUsers.png)
+
 ## 🚀 Stack
 
 - Java 11+
