@@ -47,10 +47,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		final String token = authHeader.substring(7); // quitar "Bearer "
-		final String email = jwtService.getSubject(token);
-
 		try {
+			final String token = authHeader.substring(7); // quitar "Bearer "
+			final String email = jwtService.getSubject(token);
+			
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 			if (email != null && authentication == null) {
