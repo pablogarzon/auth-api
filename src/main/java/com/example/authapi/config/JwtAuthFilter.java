@@ -31,7 +31,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	private final UserDetailsService userDetailsService;
 	private final ObjectMapper objectMapper;
 
-	public JwtAuthFilter(final JWTService jwtService, final UserDetailsService userDetailsService, final ObjectMapper objectMapper) {
+	public JwtAuthFilter(final JWTService jwtService, final UserDetailsService userDetailsService,
+			final ObjectMapper objectMapper) {
 		this.jwtService = jwtService;
 		this.userDetailsService = userDetailsService;
 		this.objectMapper = objectMapper;
@@ -40,29 +41,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String authHeader = request.getHeader("Authorization");
 
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+		final String token = getTokenFromRequest(request);
+		if (token == null) {
 			filterChain.doFilter(request, response);
 			return;
 		}
 
 		try {
-			final String token = authHeader.substring(7); // quitar "Bearer "
-			final String email = jwtService.getSubject(token);
-			
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			validateToken(request, token);
 
-			if (email != null && authentication == null) {
-				UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
-				if (jwtService.validateToken(token, userDetails)) {
-					UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-							null, userDetails.getAuthorities());
-
-					authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-					SecurityContextHolder.getContext().setAuthentication(authToken);
-				}
-			}
 			filterChain.doFilter(request, response);
 		} catch (UsernameNotFoundException | JwtException ex) {
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -70,9 +58,34 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 			ErrorDTO error = new ErrorDTO(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
 			String body = objectMapper.writeValueAsString(error);
-			
+
 			response.getWriter().write(body);
 		}
 	}
 
+	private String getTokenFromRequest(final HttpServletRequest request) {
+		final String authHeader = request.getHeader("Authorization");
+
+		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+			return null;
+		}
+		return authHeader.substring(7); // quitar "Bearer "
+	}
+
+	private void validateToken(HttpServletRequest request, final String token)
+			throws UsernameNotFoundException, JwtException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		final String email = jwtService.getUseremailFromToken(token);
+
+		if (email != null && authentication == null) {
+			UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
+			if (jwtService.validateToken(token, userDetails)) {
+				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+						null, userDetails.getAuthorities());
+
+				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				SecurityContextHolder.getContext().setAuthentication(authToken);
+			}
+		}
+	}
 }

@@ -16,8 +16,7 @@ public class UserMapper {
 	}
 
 	public static User toEntity(CreateUserDTO createUserDTO) {
-		var user = new User(createUserDTO.getName(), createUserDTO.getEmail());
-		user.setPhones(PhoneMapper.toEntity(createUserDTO.getPhones()));
-		return user;
+		return new User(createUserDTO.getName(), createUserDTO.getEmail(),
+				PhoneMapper.toEntity(createUserDTO.getPhones()));
 	}
 }

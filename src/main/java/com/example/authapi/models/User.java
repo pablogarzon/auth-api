@@ -30,7 +30,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails {	
+
+	public User(String name, String email, List<Phone> phones) {
+		this(name, email);
+		var now = LocalDateTime.now();
+		this.setPhones(phones);
+		this.setActive(true);
+		this.setLastLogin(now);
+		this.setCreated(now);
+	}
 
 	/**
 	 * 

@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.authapi.dtos.CreateUserDTO;
 import com.example.authapi.dtos.LoginDTO;
+import com.example.authapi.dtos.PhoneDTO;
 import com.example.authapi.exceptions.EmailAlreadyUsedException;
 import com.example.authapi.exceptions.InvalidCredentialsException;
 import com.example.authapi.models.User;
@@ -61,7 +63,11 @@ class AuthServiceTest {
 
 	@Test
 	void signUp_shouldCreateUserSuccessfully() throws EmailAlreadyUsedException {
-		var createUserDTO = new CreateUserDTO(name, email, password, Collections.emptyList());
+		var phoneDTO = new PhoneDTO();
+		phoneDTO.setCitycode(11);
+		phoneDTO.setContrycode("+54");
+		phoneDTO.setNumber(132L);
+		var createUserDTO = new CreateUserDTO(name, email, password, List.of(phoneDTO));
 		final String token = "token";
 		when(userRepository.findByEmail(createUserDTO.getEmail())).thenReturn(Optional.empty());
 

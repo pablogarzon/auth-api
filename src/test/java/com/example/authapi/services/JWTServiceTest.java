@@ -48,7 +48,7 @@ class JWTServiceTest {
 	void extractSubject_shouldReturnUserEmail() {
 		var user = new User("name", "email");
 		String token = service.generateToken(user);
-		var email = service.getSubject(token);
+		var email = service.getUseremailFromToken(token);
 		assertEquals(user.getEmail(), email);
 	}
 }

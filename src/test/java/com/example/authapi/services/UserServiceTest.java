@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.authapi.dtos.PhoneDTO;
 import com.example.authapi.dtos.UpdateUserDTO;
 import com.example.authapi.exceptions.UserNotFoundException;
 import com.example.authapi.models.Phone;

@@ -43,7 +43,7 @@ public class JWTService {
 		return username.equals(userDetails.getUsername());
 	}
 	
-	public String getSubject(String token) {
+	public String getUseremailFromToken(String token) {
 		return extractPayload(token).getSubject();
 	}
 

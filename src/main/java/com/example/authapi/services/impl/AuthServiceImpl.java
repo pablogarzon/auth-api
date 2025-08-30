@@ -42,9 +42,6 @@ public class AuthServiceImpl implements AuthService {
 			throw new EmailAlreadyUsedException();
 		}
 		var user = UserMapper.toEntity(createUserDTO);
-		user.setActive(true);
-		user.setLastLogin(LocalDateTime.now());
-		user.setCreated(LocalDateTime.now());
 		user.setPassword(passwordEncoder.encode(createUserDTO.getPassword()));
 		var savedusr = userRepository.save(user);
 
