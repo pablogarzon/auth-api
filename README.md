@@ -51,7 +51,7 @@ Microservicio para la creación y consulta de usuarios
 
 ### 📖 Documentación de la API
 
-Con el proyecto en ejecución visitar `http://localhost:8080/swagger-ui/index.html#/`
+[http://localhost:8080/swagger-ui/index.html#/](http://localhost:8080/swagger-ui/index.html#/)
 
 ### 🧪 Ejecutar tests
 
